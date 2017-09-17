@@ -1,12 +1,36 @@
 # ember-img-lazy
 
-This README outlines the details of collaborating on this Ember addon.
+Lazily load images once they enter your viewport.
+
+Uses `IntersectionObserver`, does not provide a polyfill and loads
+images immediately if `IntersectionObserver` is not available.
+
+## Usage
+```handlebars
+{{img-lazy src="smile.png" width=200 height=200 alt="Smile"}}
+```
+
+## Configuration
+
+`config/environment`:
+```javascript
+module.exports = function(environment) {
+  let ENV = {
+    // ...
+    'ember-img-lazy': {
+      // Don't load images in fastboot, this effectively
+      // shows the placeholder image until ember takes over.
+      // Default: false
+      lazyFastBoot: true
+    }
+  }
+  // ...
+}
+```
 
 ## Installation
 
-* `git clone <repository-url>` this repository
-* `cd ember-img-lazy`
-* `npm install`
+* `ember install ember-img-lazy`
 
 ## Running
 

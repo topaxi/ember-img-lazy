@@ -1,0 +1,1 @@
+export { default } from 'ember-img-lazy/components/img-lazy';

@@ -1,24 +1,25 @@
 {
   "name": "ember-img-lazy",
-  "version": "0.0.0",
-  "description": "The default blueprint for ember-cli addons.",
+  "version": "1.0.0",
+  "description": "Lazy load img elements",
   "keywords": [
     "ember-addon"
   ],
   "license": "MIT",
-  "author": "",
+  "author": "Damian Senn <damian.senn@topaxi.codes>",
   "directories": {
     "doc": "doc",
     "test": "tests"
   },
-  "repository": "",
+  "repository": "https://github.com/topaxi/ember-img-lazy.git",
   "scripts": {
     "build": "ember build",
     "start": "ember server",
     "test": "ember try:each"
   },
   "dependencies": {
-    "ember-cli-babel": "^6.3.0"
+    "ember-cli-babel": "^6.3.0",
+    "ember-config-service": "^0.1.6"
   },
   "devDependencies": {
     "broccoli-asset-rev": "^2.4.5",
