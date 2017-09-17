@@ -1,12 +1,19 @@
-import Service from '@ember/service';
+import { assign } from '@ember/polyfills';
+import Service, { inject as service } from '@ember/service';
 import { set, get } from '@ember/object';
 import { run } from '@ember/runloop';
 import RSVP from 'rsvp'
 
 const { Promise } = RSVP
+const DEFAULT_OBSERVER_CONFIG = {
+  rootMargin: '50px 0px',
+  threshold: 0.01,
+}
 
 export default Service.extend({
   observer: null,
+
+  config: service(),
 
   init() {
     this._super();
@@ -16,10 +23,10 @@ export default Service.extend({
 
     if (this.hasIntersectionObserver) {
       this.components = []
-      this.config = {
-        rootMargin: '100px 0px',
-        threshold: 0.01,
-      }
+      this.config = assign({},
+        DEFAULT_OBSERVER_CONFIG,
+        get(this, 'config.ember-img-lazy.observerConfig') || {}
+      )
       this.onIntersection = run.bind(this, this.onIntersection)
     }
   },

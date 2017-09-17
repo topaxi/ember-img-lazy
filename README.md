@@ -21,7 +21,13 @@ module.exports = function(environment) {
       // Don't load images in fastboot, this effectively
       // shows the placeholder image until ember takes over.
       // Default: false
-      lazyFastBoot: true
+      lazyFastBoot: true,
+
+      // Config passed to IntersectionObserver.
+      observerConfig: {
+        rootMargin: '50px 0px',
+        threshold: 0.01
+      }
     }
   }
   // ...
