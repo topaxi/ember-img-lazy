@@ -4,7 +4,7 @@ import Component from '@ember/component';
 import { get, computed } from '@ember/object';
 
 const emptySvg = (width, height) =>
-  `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}"></svg>`
+  `<svg xmlns="http://www.w3.org/2000/svg" width="${width|0}" height="${height|0}"></svg>`
 
 // Build an svg of the given size to prelayout the correct space
 const placeholder = (width, height) => width && height ?
