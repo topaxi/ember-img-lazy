@@ -75,8 +75,10 @@ export default Service.extend({
       if (entries[i].intersectionRatio > 0) {
         let component = this.getComponent(entries[i].target)
 
-        this.unobserve(component)
-        this.preloadImage(component)
+        if (component !== undefined) {
+          this.unobserve(component)
+          this.preloadImage(component)
+        }
       }
     }
   },
@@ -95,6 +97,9 @@ export default Service.extend({
     set(component, '_loading', true)
     return fetchImage(src)
       .then(() => {
+        if (component.isDestroyed) {
+          return;
+        }
         set(component, '_src', src)
         set(component, '_loaded', true)
         set(component, '_loading', false)
