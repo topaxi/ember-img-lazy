@@ -1,6 +1,6 @@
 {
   "name": "ember-img-lazy",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Lazy load img elements",
   "keywords": [
     "ember-addon"
