@@ -10,6 +10,10 @@ images immediately if `IntersectionObserver` is not available.
 {{img-lazy src="smile.png" width=200 height=200 alt="Smile"}}
 ```
 
+`{{img-lazy}}` will add the class `img-lazy--loading` once it starts
+fetching the image source and applies the class `img-lazy--loaded` and `src`
+property when it finishes.
+
 ## Configuration
 
 `config/environment`:
@@ -22,6 +26,13 @@ module.exports = function(environment) {
       // shows the placeholder image until ember takes over.
       // Default: false
       lazyFastBoot: true,
+
+      // The default setting is useful if one wants to show a
+      // placeholder loading img (i.e. through a background-image).
+      // Disable to not wait for the images to load to set the src url.
+      // This is mostly useful with progressive encoded images.
+      // Default: false
+      setSrcImmediately: false,
 
       // Config passed to IntersectionObserver.
       observerConfig: {

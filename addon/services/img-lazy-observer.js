@@ -1,10 +1,8 @@
-import { assign } from '@ember/polyfills';
-import Service, { inject as service } from '@ember/service';
-import { set, get } from '@ember/object';
-import { run } from '@ember/runloop';
-import RSVP from 'rsvp'
+import { assign } from '@ember/polyfills'
+import Service, { inject as service } from '@ember/service'
+import { get } from '@ember/object'
+import { run } from '@ember/runloop'
 
-const { Promise } = RSVP
 const DEFAULT_OBSERVER_CONFIG = {
   rootMargin: '50px 0px',
   threshold: 0.01,
@@ -16,7 +14,7 @@ export default Service.extend({
   config: service(),
 
   init() {
-    this._super();
+    this._super()
 
     this.hasIntersectionObserver = typeof FastBoot === 'undefined' &&
       'IntersectionObserver' in window
@@ -77,7 +75,7 @@ export default Service.extend({
 
         if (component !== undefined) {
           this.unobserve(component)
-          this.preloadImage(component)
+          component.loadImage()
         }
       }
     }
@@ -86,38 +84,4 @@ export default Service.extend({
   getComponent(img) {
     return this.components.find(c => c.element === img)
   },
-
-  preloadImage(component) {
-    const src = get(component, 'src')
-
-    if (src === null) {
-      return
-    }
-
-    set(component, '_loading', true)
-    return fetchImage(src)
-      .then(() => {
-        if (component.isDestroyed) {
-          return;
-        }
-        set(component, '_src', src)
-        set(component, '_loaded', true)
-        set(component, '_loading', false)
-      })
-  }
 })
-
-function fetchImage(url) {
-  return new Promise((resolve, reject) => {
-    const img = new Image
-    img.src = url
-
-    if (img.completed || img.readyState === 4) {
-      resolve(url)
-    }
-    else {
-      img.onload = resolve.bind(null, url)
-      img.onerror = reject
-    }
-  })
-}
