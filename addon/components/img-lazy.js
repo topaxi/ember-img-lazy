@@ -32,6 +32,7 @@ export default Component.extend({
 
   lazyFastBoot: oneWay('config.ember-img-lazy.lazyFastBoot'),
   immediately: oneWay('config.ember-img-lazy.setSrcImmediately'),
+  ignoreError: oneWay('config.ember-img-lazy.setSrcAfterError'),
 
   _src: computed('width', 'height', 'src', function() {
     if ((isFastBoot && !get(this, 'lazyFastBoot')) ||
@@ -102,6 +103,11 @@ export default Component.extend({
         this._setIsLoaded()
       })
       .catch(err => {
+        if (this.isDestroyed === false &&
+            get(this, 'ignoreError') === true) {
+          set(this, '_src', src)
+        }
+
         this._setError(err)
       })
   },

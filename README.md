@@ -34,6 +34,10 @@ module.exports = function(environment) {
       // Default: false
       setSrcImmediately: false,
 
+      // Set src attribute even if an error occurred.
+      // Default: false
+      setSrcAfterError: true,
+
       // Config passed to IntersectionObserver.
       observerConfig: {
         rootMargin: '50px 0px',
