@@ -1,0 +1,16 @@
+@keyframes fade-in {
+  to {
+    opacity: 1;
+  }
+}
+
+.img-lazy {
+  opacity: 0;
+}
+.img-lazy--loading:not(.immediately) {
+  opacity: 1;
+  background: rgba(238, 238, 236, 0.8);
+}
+.img-lazy--loaded {
+  animation: 200ms fade-in forwards;
+}

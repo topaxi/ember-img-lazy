@@ -45,6 +45,46 @@ module.exports = function(environment) {
 }
 ```
 
+## FadeIn Example
+
+```css
+@keyframes fade-in {
+  to {
+    opacity: 1;
+  }
+}
+
+.img-lazy {
+  opacity: 0;
+}
+.img-lazy--loaded {
+  animation: 200ms fade-in forwards;
+  background: none;
+}
+```
+
+Or with placeholder style, flickers if `immediately` is set (default `false`).
+
+```css
+@keyframes fade-in {
+  to {
+    opacity: 1;
+  }
+}
+
+.img-lazy {
+  opacity: 0;
+}
+.img-lazy--loading {
+  opacity: 1;
+  background: rgba(238, 238, 236, 0.8);
+}
+.img-lazy--loaded {
+  animation: 200ms fade-in forwards;
+}
+```
+
+
 ## Installation
 
 * `ember install ember-img-lazy`
