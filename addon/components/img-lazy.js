@@ -1,6 +1,6 @@
 import RSVP from 'rsvp'
 import { scheduleOnce } from '@ember/runloop'
-import { oneWay } from '@ember/object/computed'
+import { oneWay, not } from '@ember/object/computed'
 import { inject as service } from '@ember/service'
 import Component from '@ember/component'
 import { set, get, computed } from '@ember/object'
@@ -42,7 +42,7 @@ export default Component.extend({
     return placeholder(get(this, 'width'), get(this, 'height'))
   }),
   _error: null,
-  _loaded: false,
+  _loaded: not('observer.hasIntersectionObserver'),
   _loading: oneWay('observer.hasIntersectionObserver'),
 
   src: null,
