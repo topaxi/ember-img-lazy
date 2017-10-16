@@ -60,7 +60,13 @@ export default Service.extend({
       return
     }
 
-    this.observer.unobserve(component.element)
+    try {
+      this.observer.unobserve(component.element)
+    }
+    catch (e) {
+      console.error(e)
+    }
+
     this.components = this.components.filter(c => c !== component)
 
     if (this.components.length === 0) {
