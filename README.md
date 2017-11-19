@@ -14,6 +14,8 @@ images immediately if `IntersectionObserver` is not available.
 fetching the image source and applies the class `img-lazy--loaded` and `src`
 property when it finishes.
 
+`{{img-lazy}}` supports `srcset` and `sizes` responsive image attributes.
+
 ## Configuration
 
 `config/environment`:
@@ -31,6 +33,8 @@ module.exports = function(environment) {
       // placeholder loading img (i.e. through a background-image).
       // Disable to not wait for the images to load to set the src url.
       // This is mostly useful with progressive encoded images.
+      // If srcset attribute is passed to the component, src and srcset
+      // will be set immediately no matter if you set this config value false.
       // Default: false
       setSrcImmediately: false,
 
