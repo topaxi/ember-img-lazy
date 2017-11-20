@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 import { assign } from '@ember/polyfills'
 import Service, { inject as service } from '@ember/service'
 import { get } from '@ember/object'
