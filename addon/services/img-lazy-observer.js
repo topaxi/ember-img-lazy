@@ -4,6 +4,7 @@ import { assign } from '@ember/polyfills'
 import Service, { inject as service } from '@ember/service'
 import { get } from '@ember/object'
 import { run } from '@ember/runloop'
+import { getOwner } from '@ember/application';
 
 const DEFAULT_OBSERVER_CONFIG = {
   rootMargin: '50px 0px',
@@ -11,85 +12,75 @@ const DEFAULT_OBSERVER_CONFIG = {
 }
 
 export default Service.extend({
-  observer: null,
-
   config: service(),
 
   init() {
-    this._super()
+    this._super(...arguments)
 
     this.hasIntersectionObserver = typeof FastBoot === 'undefined' &&
       'IntersectionObserver' in window
 
-    if (this.hasIntersectionObserver) {
-      this.components = []
-      this.config = assign({},
-        DEFAULT_OBSERVER_CONFIG,
-        get(this, 'config.ember-img-lazy.observerConfig') || {}
-      )
-      this.onIntersection = run.bind(this, this.onIntersection)
-    }
+    this._config = assign({},
+      DEFAULT_OBSERVER_CONFIG,
+      get(this, 'config.ember-img-lazy.observerConfig')
+    )
   },
 
-  createObserver() {
-    if (this.observer) {
-      throw new Error('There is already an intersection observer present')
-    }
+  // maintains singleton this._observer object
+  getObserver() {
+    if (this._observer) {
+      return this._observer;
+    } else if (this.hasIntersectionObserver) {
+      this._observer = new IntersectionObserver(
+        run.bind(this, this.onIntersection), this._config
+      )
 
-    this.observer = new IntersectionObserver(this.onIntersection, this.config)
+      return this._observer
+    }
   },
 
   stopObserver() {
-    this.observer.disconnect()
-    this.observer = null
-  },
-
-  observe(component) {
-    if (this.hasIntersectionObserver === false) {
-      return
-    }
-
-    if (this.observer === null) {
-      this.createObserver()
-    }
-
-    this.observer.observe(component.element)
-    this.components.push(component)
-  },
-
-  unobserve(component) {
-    if (this.hasIntersectionObserver === false || this.observer === null) {
-      return
-    }
-
-    try {
-      this.observer.unobserve(component.element)
-    }
-    catch (e) {
-      console.error(e)
-    }
-
-    this.components = this.components.filter(c => c !== component)
-
-    if (this.components.length === 0) {
-      this.stopObserver()
+    if (this._observer) {
+      this._observer.disconnect()
+      this._observer = null
     }
   },
 
-  onIntersection(entries) {
-    for (let i = 0; i < entries.length; i++) {
-      if (entries[i].intersectionRatio > 0) {
-        let component = this.getComponent(entries[i].target)
+  observe(element) {
+    let observer = this.getObserver()
 
-        if (component !== undefined) {
-          this.unobserve(component)
-          component.loadImage()
-        }
+    if (observer) {
+      observer.observe(element)
+    }
+  },
+
+  unobserve(element) {
+    if (this._observer) {
+      // calling unobserve() for unobserved elements may throw error
+      // on some browsers especially Edge
+      try {
+        this._observer.unobserve(element)
+      }
+      catch (e) {
+        console.warn(e)
       }
     }
   },
 
-  getComponent(img) {
-    return this.components.find(c => c.element === img)
+  onIntersection(entries) {
+    entries.forEach(entry => {
+      if (entry.intersectionRatio > 0) {
+        let component = this.getComponent(entry.target.id)
+
+        if (component !== undefined) {
+          this.unobserve(component.element)
+          component.loadImage()
+        }
+      }
+    });
   },
+
+  getComponent(id) {
+    return getOwner(this).lookup('-view-registry:main')[id]
+  }
 })

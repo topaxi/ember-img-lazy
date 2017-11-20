@@ -72,11 +72,13 @@ export default Component.extend({
   ],
 
   didInsertElement() {
-    get(this, 'observer').observe(this)
+    this._super(...arguments)
+    get(this, 'observer').observe(this.element)
   },
 
   willDestroyElement() {
-    get(this, 'observer').unobserve(this)
+    this._super(...arguments)
+    get(this, 'observer').unobserve(this.element)
   },
 
   loadImage() {
