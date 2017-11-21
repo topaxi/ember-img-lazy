@@ -41,6 +41,14 @@ export default Component.extend({
 
     return placeholder(get(this, 'width'), get(this, 'height'))
   }),
+
+  _srcset: computed('srcset', function() {
+    if ((isFastBoot && !get(this, 'lazyFastBoot')) ||
+      (!isFastBoot && !get(this, 'observer.hasIntersectionObserver'))) {
+      return get(this, 'srcset')
+    }
+  }),
+
   _error: null,
   _loaded: not('observer.hasIntersectionObserver'),
   _loading: oneWay('observer.hasIntersectionObserver'),
@@ -50,34 +58,42 @@ export default Component.extend({
   alt: null,
   width: null,
   height: null,
+  srcset: null,
+  sizes: null,
 
   attributeBindings: [
     '_src:src',
+    '_srcset:srcset',
     'title',
     'alt',
     'width',
     'height',
+    'sizes'
   ],
 
   didInsertElement() {
-    get(this, 'observer').observe(this)
+    this._super(...arguments)
+    get(this, 'observer').observe(this.element)
   },
 
   willDestroyElement() {
-    get(this, 'observer').unobserve(this)
+    this._super(...arguments)
+    get(this, 'observer').unobserve(this.element)
   },
 
   loadImage() {
-    const src = get(this, 'src')
+    let src = get(this, 'src')
+    let srcset = get(this, 'srcset')
 
-    if (src === null) {
+    if (src === null && srcset === null) {
       return
     }
 
     this._setIsLoading()
 
-    if (get(this, 'immediately')) {
+    if (get(this, 'immediately') || srcset) {
       set(this, '_src', src)
+      set(this, '_srcset', srcset)
 
       scheduleOnce('afterRender', this, () => {
         if (isLoaded(this.element)) {
@@ -143,7 +159,7 @@ function isLoaded(img) {
 
 function fetchImage(url) {
   return new Promise((resolve, reject) => {
-    const img = new Image
+    let img = new Image
     img.src = url
 
     if (isLoaded(img)) {

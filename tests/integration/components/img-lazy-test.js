@@ -12,13 +12,4 @@ test('it renders', function(assert) {
   this.render(hbs`{{img-lazy}}`);
 
   assert.equal(this.$().text().trim(), '');
-
-  // Template block usage:
-  this.render(hbs`
-    {{#img-lazy}}
-      template block text
-    {{/img-lazy}}
-  `);
-
-  assert.equal(this.$().text().trim(), 'template block text');
 });

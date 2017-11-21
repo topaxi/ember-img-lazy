@@ -1,4 +1,3 @@
-/* global wait */
 import $ from 'jquery'
 import { test } from 'qunit'
 import moduleForAcceptance from '../../tests/helpers/module-for-acceptance'
@@ -15,14 +14,16 @@ test('it lazyloads', function(assert) {
     assert.ok(/%3Csvg/.test($('img').prop('src')), 'renders a placeholder svg')
   })
 
-  wait()
+  let done = assert.async()
 
-  andThen(function() {
+  setTimeout(function() {
     assert.equal($('img').prop('width'), 300)
     assert.equal($('img').prop('height'), 205)
     assert.equal(
       $('img').prop('src'),
       'http://localhost:7357/assets/ninja-sleepin.svg'
     )
-  })
+
+    done()
+  }, 5000)
 })
