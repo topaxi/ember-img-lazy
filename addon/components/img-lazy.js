@@ -4,6 +4,7 @@ import { oneWay, not } from '@ember/object/computed'
 import { inject as service } from '@ember/service'
 import Component from '@ember/component'
 import { set, get, computed } from '@ember/object'
+import { run } from '@ember/runloop'
 
 const { Promise } = RSVP
 
@@ -86,8 +87,8 @@ export default Component.extend({
           return
         }
 
-        this.element.onload = () => this._setIsLoaded()
-        this.element.onerror = err => this._setError(err)
+        this.element.onload = run.bind(this, this._setIsLoaded)
+        this.element.onerror = run.bind(this, this._setError)
       })
 
       return
@@ -142,16 +143,18 @@ function isLoaded(img) {
 }
 
 function fetchImage(url) {
-  return new Promise((resolve, reject) => {
-    const img = new Image
-    img.src = url
+  return new Promise((resolve, reject) =>
+    setTimeout(() => run(() => {
+      const img = new Image
+      img.src = url
 
-    if (isLoaded(img)) {
-      resolve(url)
-    }
-    else {
-      img.onload = resolve.bind(null, url)
-      img.onerror = reject
-    }
-  })
+      if (isLoaded(img)) {
+        resolve(url)
+      }
+      else {
+        img.onload = resolve.bind(null, url)
+        img.onerror = reject
+      }
+    }))
+  )
 }

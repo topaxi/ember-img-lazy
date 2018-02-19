@@ -1,27 +1,23 @@
-/* global wait */
-import $ from 'jquery'
-import { test } from 'qunit'
-import moduleForAcceptance from '../../tests/helpers/module-for-acceptance'
+import { find, visit, waitUntil } from '@ember/test-helpers'
+import { module, test } from 'qunit'
+import { setupApplicationTest } from 'ember-qunit'
 
-moduleForAcceptance('Acceptance | lazyload')
+module('Acceptance | lazyload', function(hooks) {
+  setupApplicationTest(hooks)
 
-test('it lazyloads', function(assert) {
-  visit('/')
+  test('it lazyloads', async function(assert) {
+    await visit('/')
 
-  andThen(function() {
-    assert.equal(currentURL(), '/')
-    assert.equal($('img').prop('width'), 300)
-    assert.equal($('img').prop('height'), 205)
-    assert.ok(/%3Csvg/.test($('img').prop('src')), 'renders a placeholder svg')
-  })
+    assert.equal(find('img').width, 300)
+    assert.equal(find('img').height, 205)
+    assert.ok(/%3Csvg/.test(find('img').src), 'renders a placeholder svg')
 
-  wait()
+    await waitUntil(() => find('img').src.startsWith('http'))
 
-  andThen(function() {
-    assert.equal($('img').prop('width'), 300)
-    assert.equal($('img').prop('height'), 205)
+    assert.equal(find('img').width, 300)
+    assert.equal(find('img').height, 205)
     assert.equal(
-      $('img').prop('src'),
+      find('img').src,
       'http://localhost:7357/assets/ninja-sleepin.svg'
     )
   })

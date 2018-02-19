@@ -1,12 +1,12 @@
-import { skip } from 'qunit';
-import { moduleFor } from 'ember-qunit';
+import { module, skip } from 'qunit';
+import { setupTest } from 'ember-qunit';
 
-moduleFor('service:img-lazy-observer', 'Unit | Service | img lazy observer', {
-  needs: ['service:config']
-});
+module('Unit | Service | img lazy observer', function(hooks) {
+  setupTest(hooks);
 
-// Replace this with your real tests.
-skip('it exists', function(assert) {
-  let service = this.subject();
-  assert.ok(service);
+  // Replace this with your real tests.
+  skip('it exists', function(assert) {
+    let service = this.subject();
+    assert.ok(service);
+  });
 });

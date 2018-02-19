@@ -12,6 +12,7 @@ export default Service.extend({
   observer: null,
 
   config: service(),
+  _config: null,
 
   init() {
     this._super()
@@ -21,7 +22,7 @@ export default Service.extend({
 
     if (this.hasIntersectionObserver) {
       this.components = []
-      this.config = assign({},
+      this._config = assign({},
         DEFAULT_OBSERVER_CONFIG,
         get(this, 'config.ember-img-lazy.observerConfig') || {}
       )
@@ -34,7 +35,7 @@ export default Service.extend({
       throw new Error('There is already an intersection observer present')
     }
 
-    this.observer = new IntersectionObserver(this.onIntersection, this.config)
+    this.observer = new IntersectionObserver(this.onIntersection, this._config)
   },
 
   stopObserver() {
@@ -64,7 +65,7 @@ export default Service.extend({
       this.observer.unobserve(component.element)
     }
     catch (e) {
-      console.error(e)
+      console.error(e) // eslint-disable-line
     }
 
     this.components = this.components.filter(c => c !== component)
