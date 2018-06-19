@@ -1,7 +1,8 @@
 import { assign } from '@ember/polyfills'
-import Service, { inject as service } from '@ember/service'
+import Service from '@ember/service'
 import { get } from '@ember/object'
 import { run } from '@ember/runloop'
+import config from 'ember-get-config';
 
 const DEFAULT_OBSERVER_CONFIG = {
   rootMargin: '50px 0px',
@@ -11,7 +12,8 @@ const DEFAULT_OBSERVER_CONFIG = {
 export default Service.extend({
   observer: null,
 
-  config: service(),
+  config,
+
   _config: null,
 
   init() {
