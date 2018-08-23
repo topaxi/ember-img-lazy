@@ -5,6 +5,7 @@ import { inject as service } from '@ember/service'
 import Component from '@ember/component'
 import { set, get, computed } from '@ember/object'
 import { run } from '@ember/runloop'
+import config from 'ember-get-config';
 
 const { Promise } = RSVP
 
@@ -21,7 +22,7 @@ const isFastBoot = typeof FastBoot !== 'undefined'
 export default Component.extend({
   tagName: 'img',
 
-  config: service(),
+  config,
   observer: service('img-lazy-observer'),
 
   classNames: [ 'img-lazy' ],
