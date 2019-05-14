@@ -65,7 +65,7 @@ export default Component.extend({
     get(this, 'observer').observe(this)
   },
 
-  didReceiveAttrs() {
+  didUpdateAttrs() {
     this._super(...arguments);
 
     if (this._src !== this.src) {
