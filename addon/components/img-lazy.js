@@ -68,7 +68,7 @@ export default Component.extend({
   didReceiveAttrs() {
     this._super(...arguments);
 
-    if (this._src !== this.getAttr('src')) {
+    if (this._src !== this.src) {
       this.loadImage()
     }
   },
