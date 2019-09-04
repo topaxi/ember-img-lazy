@@ -65,6 +65,14 @@ export default Component.extend({
     get(this, 'observer').observe(this)
   },
 
+  didUpdateAttrs() {
+    this._super(...arguments);
+
+    if (this._src !== this.src) {
+      this.loadImage()
+    }
+  },
+
   willDestroyElement() {
     get(this, 'observer').unobserve(this)
   },
