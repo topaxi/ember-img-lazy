@@ -1,5 +1,5 @@
 'use strict';
 
 module.exports = {
-  name: 'ember-img-lazy'
+  name: require('./package').name
 };
